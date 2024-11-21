@@ -177,61 +177,8 @@ def calc_data_storage(config, debug):
     plt.ylabel("Latency [hr]")
     plt.savefig('ssdr_box.png')
 
-
-def unused():
-    s_mode = [0]*int(duration.to(u.min).value)
-    for i in range(0, int(duration.to(u.min).value)):
-        # Find all accesses before current time
-        a = schedule[schedule['access_start'] <= i]
-        # Of that list find those where the access end is in the future
-        a = a[a['access_end'] > i]
-        if len(a)>0:
-            if len(a)>1:
-                raise NotImplementedError
-            if a.iloc[0]['access_start'] == i:
-                s_mode[i] = 2
-                for j in range(
-                    1,
-                    1+config.constellation.satellite.attitude.pre_comms_attitude
-                ):
-                    s_mode[i-j] = 1
-            else:
-                s_mode[i] = 2
-
-
-    ssdr = [0]*int(duration.to(u.min).value)
-    for k,v in enumerate(s_mode):
-        if v == 0:
-            ssdr[k] = payload_data_rate + telemetry_data_rate
-        elif v == 1:
-            ssdr[k] = telemetry_data_rate
-        elif v == 2:
-            ssdr[k] = telemetry_data_rate
-
-    with open('ssdr.csv', 'w') as file:
-        file.write('time,ssdr')
-        op_start = 0
-        for op in schedule.index:
-            op_end = int(schedule.loc[[op]]['access_end'].tolist()[0])
-            data = sum(ssdr[op_start:op_end])
-            #file.write('\n'+str(int(schedule.loc[[op]]['access_start'].tolist()[0]))+','+str(data/1024/1024/1024))
-            xmit_bits_time = schedule.loc[[op]]['access_time'].tolist()[0]*u.min- \
-                config.payload.comms.link_setup_time*u.s - \
-                config.payload.comms.link_drop_time*u.s
-            data = data - (xmit_bits_time.to(u.s).value * \
-                config.payload.comms.dl_rate*1024*1024)
-            if data < 0:
-                data = 0
-            file.write('\n'+str(op_end)+','+str(data/1024/1024/1024))
-            op_start = op_end
-
-    msft = pd.read_csv('ssdr.csv')
-    #print(msft.ssdr)
-    plt.plot(msft['time'], msft['ssdr'])
-    plt.savefig('ssdr.png')
-
-    #v = msft.describe()
-    #print(v.ssdr['mean'])
-    plt.clf()
-    plt.boxplot(msft.ssdr)
-    plt.savefig('ssdr_box.png')
+    # File output
+    with open('latency.csv', 'w') as file:
+        file.write('latency')
+        for i in space_latency:
+            file.write("\n"+i)
