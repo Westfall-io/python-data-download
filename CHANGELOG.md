@@ -1,6 +1,12 @@
 # CHANGELOG
 
+## v0.0.1 (2024-11-21)
+
 ## v0.0.0 (2024-11-21)
+
+### :bug:
+
+* :bug: Adding data export and removing excess code ([`8c3b855`](https://github.com/Westfall-io/python-data-download/commit/8c3b85553d982683b7da74c8d45c9890749349bd))
 
 ### Other
 
