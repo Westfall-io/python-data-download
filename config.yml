@@ -1,0 +1,85 @@
+## Main orbit params
+#a = (500+6378.14) * u.km
+#inc = 45 * u.deg
+## Walker params
+#sats = 10
+#planes = 10
+### Hardcoded f=0
+# Image params
+#max_resolution = 50 #m from requirement
+#pixel_pitch_micron = 0.0055 #mm
+#focal_length = 31.69 # cm
+# Targets
+#lats = [38.65, 45.28, 43.93, 45.60, 33.87]
+#lons = [-117.5, -114.2, -110.24, -112.79, -111.28]
+# Sim params
+#duration = 7*u.day
+#sim_step = 1*u.min
+
+# Assume all circular, regular orbits
+#ecc = 0 * u.one
+#argp = 0 * u.deg
+
+constellation:
+  sats: 1 #unitless
+  planes: 1 #unitless
+  orbit:
+    h: 500 #km
+    inc: 45 #deg
+    ecc: 0 #unitless
+    argp: 0 #deg
+    epoch: "2012-7-12 23:00:00"
+  satellite:
+    attitude:
+      pre_comms_attitude: 1 #min -- Time prior to contact to stop collecting
+    comms:
+      min_comms_access: 3 #min
+payload:
+  comms:
+    power: 2 #W
+    #3db_beamwidth: 60 #deg
+    cable_loss: 3 #db
+    gain: 7.25 #dBi
+    bandwidth: 200000 #kHz
+    frequency: 8.025 # GHz
+    min_snr: 20 #dB
+    link_setup_time: 20 #s
+    link_drop_time: 60 #s
+    dl_rate: 100 #Mbps
+  sensor:
+    max_resolution: 50 #m
+    pixel_pitch_micron: 5.5 #micron
+    focal_length: 31.69 #cm
+    pixels_x: 1280
+    pixels_y: 1080
+    bpp: 10
+    comp_ratio: 0.5
+    integration_time_s: 0.5 #s
+  telemetry:
+    data_rate: 50 #kbps
+scenario:
+  comms:
+    comms_while_collecting: False
+  targets:
+    lats: [34.0549, 19.8987, 8.538, 38.6884, -25.8904, -20.3484,
+      25.2048, 1.3521, 35.6764, -40.9006] #deg
+    lons: [-118.2426, -155.6659, -80.7821, -4.1079, 27.6845, 57.5522,
+      55.2708, 103.8198, 139.65, 174.8860] #deg
+    recvr_gain: 35 #dBi
+    target_type: ["comms", "comms", "comms", "comms", "comms", "comms",
+      "comms", "comms","comms", "comms"]
+    # LA - 34.0549° N, 118.2426° W
+    # Hawaii - 19.8987° N, 155.6659° W
+    # Panama - 8.5380° N, 80.7821° W
+    # Puertollano - 38.6884° N, 4.1079° W
+    # Hartebeesthoek - 25.8904° S, 27.6845° E
+    # Mauritius - 20.3484° S, 57.5522° E
+    # Dubai - 25.2048° N, 55.2708° E
+    # Singapore - 1.3521° N, 103.8198° E
+    # Tokyo - 35.6764° N, 139.6500° E
+    # New Zealand - 40.9006° S, 174.8860° E
+  duration: 7 #days
+  sim_step: 1 #min
+post_process:
+  run_access: False
+  generate_data_curve: True
